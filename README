@@ -1,0 +1,124 @@
+# ******************************************************************************
+# Author      : Srivamshi Pittala (srivamshi.pittala.gr@dartmouth.edu)
+# Advisor     : Prof. Chris Bailey-Kellogg (cbk@cs.dartmouth.edu)
+# Project     : PECAN: Paratope and Epitope Prediction with graph Convolution Attention Network
+# Description : Help file for running the scripts to learn and evaluate
+#		graph convolution networks for epitope and paratope prediction
+# Cite        : doi: https://doi.org/10.1101/658054 
+# ******************************************************************************
+
+# This code was developed using the code provided for Fout et al., Protein Interface Prediction using Graph Convolutional Networks published in NeurIPS, 2017.
+
+# Copyright (C) <2019>  <Srivamshi Pittala>
+
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#***********************
+Input Files (pickle format)
+1. Paratope prediction: results_create_files_for_paratope/ 
+2. Epitope prediction: results_create_files_for_epitope/
+3. General proteins: results_create_files_for_protein_base/
+
+The data format is the following:
+- list of dictionaries, each corresponding to a protein
+- - Each dictionary has the following entries(keys):
+- - - complex_code: str
+- - - l_vertex: numpy matrix of residues in primary protein (dimensions: num_residues x 63)
+- - - - Indices [0,20] represent one hot encoding of the residue. Last entry for unresolved amino acid '*'.
+- - - - Indices [21,40] represent PSSM entry for the
+- - - - Indices [41:42] represent solvent accessibility
+- - - - Indices [43:62] represent neighborhood composition 
+- - - l_edge: numpy matrix of edges, currently empty as we don't consider edge features (dimensions: num_residues x 25 x 2)
+- - - l_hood_indices: numpy matrix specifying spatial neighborhood for graph convolution (dimensions: num_residues x 25)
+- - - label: numpy matrix with labels {1: interface, -1: non-interface} (dimensions: num_residues x 2)
+- - - r_vertex: same as l_vertex, but for secondary protein
+- - - r_edge: same as l_edge, but for secondary protein
+- - - r_hood_indices: same as l_hood_indices, but for secondary protein
+- - - label_r: same as label, but for secondary protein
+#***********************
+
+#-----------------------
+Software (version)
+#-----------------------
+1. Python 2.7.15
+2. PyYAML 3.13
+3. Numpy 1.14.5
+4. Pandas 0.23.4
+5. Scikit-learn 0.19.1
+6. tensorflow 1.10.0 (gpu mode)
+7. cudatoolkit 8.0.61
+8. cudnn 5
+
+#***********************
+Training base network on proteins
+#***********************
+
+1. cd GCN_protein_base
+2. Train "No convolution" network: python sample_experiment_base.py 
+3. Train "Convolution 1-layer" network: python sample_experiment_conv1.py
+4. Train "Convolution 1-layer + Attention" network: python sample_experiment_attn1.py 
+5. Train "Convolution 2-layer" network: python sample_experiment_conv2.py
+6. Train "Convolution 2-layer + Attention" network: python sample_experiment_attn2.py
+
+#***********************
+For Epitope prediction
+#***********************
+
+#********
+Task-specific learning
+#********
+1. cd GCN_task
+2. Change 'mode_experiment, 'data_directory' and 'output_directory' in configuration.py for epitope data
+3. Train "No convolution" network: python sample_experiment_base.py 
+4. Train "Convolution 1-layer" network: python sample_experiment_conv1.py
+5. Train "Convolution 1-layer + Attention" network: python sample_experiment_attn1.py 
+6. Train "Convolution 2-layer" network: python sample_experiment_conv2.py
+7. Train "Convolution 2-layer + Attention" network: python sample_experiment_attn2.py
+
+#********
+Transfer learning (Make sure the base network on proteins was trained successfully)
+#********
+1. cd GCN_xTransfer
+2. Change 'mode_experiment, 'data_directory' and 'output_directory' in configuration.py for epitope data
+3. Train "No convolution" network: python sample_experiment_base.py 
+4. Train "Convolution 1-layer" network: python sample_experiment_conv1.py
+5. Train "Convolution 1-layer + Attention" network: python sample_experiment_attn1.py 
+6. Train "Convolution 2-layer" network: python sample_experiment_conv2.py
+7. Train "Convolution 2-layer + Attention" network: python sample_experiment_attn2.py
+
+#***********************
+For Paratope prediction
+#***********************
+
+#********
+Task-specific learning
+#********
+1. cd GCN_task
+2. Change 'mode_experiment, 'data_directory' and 'output_directory' in configuration.py for paratope data
+3. Train "No convolution" network: python sample_experiment_base.py 
+4. Train "Convolution 1-layer" network: python sample_experiment_conv1.py
+5. Train "Convolution 1-layer + Attention" network: python sample_experiment_attn1.py 
+6. Train "Convolution 2-layer" network: python sample_experiment_conv2.py
+7. Train "Convolution 2-layer + Attention" network: python sample_experiment_attn2.py
+
+#********
+Transfer learning (Make sure the base network on proteins was trained successfully)
+#********
+1. cd GCN_xTransfer
+2. Change 'mode_experiment, 'data_directory' and 'output_directory' in configuration.py for paratope data
+3. Train "No convolution" network: python sample_experiment_base.py 
+4. Train "Convolution 1-layer" network: python sample_experiment_conv1.py
+5. Train "Convolution 1-layer + Attention" network: python sample_experiment_attn1.py 
+6. Train "Convolution 2-layer" network: python sample_experiment_conv2.py
+7. Train "Convolution 2-layer + Attention" network: python sample_experiment_attn2.py
