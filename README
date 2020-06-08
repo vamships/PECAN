@@ -25,10 +25,9 @@
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #***********************
-Input Files (pickle format)
+Input Files (pickle format). Can be downloaded from zenodo here: https://zenodo.org/record/3885236.
 1. Paratope prediction: results_create_files_for_paratope/ 
 2. Epitope prediction: results_create_files_for_epitope/
-3. General proteins: results_create_files_for_protein_base/
 
 The data format is the following:
 - list of dictionaries, each corresponding to a protein
